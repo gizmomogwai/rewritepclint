@@ -1,0 +1,10 @@
+#!/usr/bin/env ruby
+
+require 'rewritepclint'
+
+Dir.glob('**/lint.xml').each do |file|
+  newfile = Rewritepclint::rewrite(file)
+  File.open(file, 'w') do |io|
+    io.put(newfile)
+  end
+end
