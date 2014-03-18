@@ -1,15 +1,19 @@
 require 'rewritepclint/version'
-require 'nokogiri'
+#require 'nokogiri'
 
 module Rewritepclint
-  def rewrite(file)
-    doc = Nokogiri::XML(file)
-    files = doc.xpath("//file")
-    prefix = Dir.cwd.split("/").last
-    puts prefix
-    files.each do |f|
-      f.content = File.join(prefix, e.content)
+#  def self.with(prefix: prefix, content: content)
+#    doc = Nokogiri::XML(content)
+#    files = doc.xpath("//file")
+#    files.each do |f|
+#      f.content = File.join(prefix, f.content).gsub("\\", "/")
+#    end
+#    return doc.to_xml()
+#  end
+  def self.with(prefix: prefix, content: content)
+    new_content = content.gsub(Regexp.new("<file>(.*?)</file>")) do |match|
+      new_filename = $1.gsub("\\", "/")
+      "<file>#{File.join(prefix, new_filename)}</file>"
     end
-    return doc.to_xml()
   end
 end

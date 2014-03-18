@@ -3,8 +3,9 @@
 require 'rewritepclint'
 
 Dir.glob('**/lint.xml').each do |file|
-  newfile = Rewritepclint::rewrite(file)
+  prefix = Dir.pwd.split('/').last
+  newfile = Rewritepclint::with(prefix: prefix, content: File.read(file))
   File.open(file, 'w') do |io|
-    io.put(newfile)
+    io.write(newfile)
   end
 end
