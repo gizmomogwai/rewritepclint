@@ -11,9 +11,10 @@ module Rewritepclint
 #    return doc.to_xml()
 #  end
   def self.with(prefix: prefix, content: content)
+    content = content.gsub('err:menubuilder:init_xdg error looking up the desktop directory', '')
     match = content.match(Regexp.new(".*(<.xml.*</doc>.).*", Regexp::MULTILINE))
-    new_content = match[1]
-    new_content = new_content.gsub(Regexp.new("<file>(.*?)</file>")) do |match|
+    content = match[1]
+    content = content.gsub(Regexp.new("<file>(.*?)</file>")) do |match|
       new_filename = $1.gsub("\\", "/")
       "<file>#{File.join(prefix, new_filename)}</file>"
     end
