@@ -19,4 +19,13 @@ module Rewritepclint
       "<file>#{File.join(prefix, new_filename)}</file>"
     end
   end
+  def self.files_with_prefix_current_directory()
+    Dir.glob('**/lint.xml').each do |file|
+      prefix = Dir.pwd.split('/').last
+      newfile = Rewritepclint::with(prefix: prefix, content: File.read(file))
+      File.open(file, 'w') do |io|
+        io.write(newfile)
+      end
+    end
+  end
 end
