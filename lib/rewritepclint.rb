@@ -1,5 +1,5 @@
 require 'rewritepclint/version'
-#require 'nokogiri'
+require 'pathname'
 
 module Rewritepclint
 #  def self.with(prefix: prefix, content: content)
@@ -11,12 +11,15 @@ module Rewritepclint
 #    return doc.to_xml()
 #  end
   def self.with(prefix: prefix, content: content)
-    content = content.gsub('err:menubuilder:init_xdg error looking up the desktop directory', '')
+    #content = content.gsub('err:menubuilder:init_xdg error looking up the desktop directory', '')
     match = content.match(Regexp.new(".*(<.xml.*</doc>.).*", Regexp::MULTILINE))
     content = match[1]
     content = content.gsub(Regexp.new("<file>(.*?)</file>")) do |match|
       new_filename = $1.gsub("\\", "/")
-      "<file>#{File.join(prefix, new_filename)}</file>"
+      if !new_filename.start_with?('/')
+        new_filename = Pathname.new(File.join(prefix, new_filename)).cleanpath
+      end
+      "<file>#{new_filename}</file>"
     end
   end
   def self.files_with_prefix_current_directory()

@@ -2,4 +2,4 @@
 
 require 'rewritepclint'
 
-Rewritepclint::file_with_current_directory()
+Rewritepclint::files_with_prefix_current_directory()
